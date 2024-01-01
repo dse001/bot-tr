@@ -26,11 +26,8 @@ namespace bot_tr
 
         public BotHandler(string botToken)
         {
-
-            //using CancellationTokenSource cts = new();
             botClient = new TelegramBotClient(botToken);
             botClient.StartReceiving(HandleUpdate, HandlePollingErrorAsync);
-            //cts.Cancel();
         }
 
         public async static Task HandleUpdate(ITelegramBotClient botClient, Update update, CancellationToken token)
