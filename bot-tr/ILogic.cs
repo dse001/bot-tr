@@ -13,5 +13,6 @@ namespace bot_tr
         Task SentMessege(ITelegramBotClient botClient, Update update, CancellationToken token, string message);
         Task RememberName(ITelegramBotClient botClient, Update update, CancellationToken token);
         Task CheckUser(ITelegramBotClient botClient, Update update, CancellationToken token);
+
     }
 }

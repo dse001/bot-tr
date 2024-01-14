@@ -19,6 +19,7 @@ namespace bot_tr
         public  string? accountName { get; set; }
         
         public static bool waitingForConfirmation = false;
+
         public bool isUserThere
         {
             get; set;
@@ -50,16 +51,17 @@ namespace bot_tr
         {
 
             userId = update.Message.From.Id;
-            FileHandler.CheckInJson(userId, isUserThere);
+            //FileHandler.CheckInJson(userId, isUserThere);
             if (isUserThere == true)
             {
                 forCheckMessage = $"мы тебя знаем {userId} за тобой уже выехали, но если ссышь жмакай /no ";
             }
-            if (isUserThere == true)
+            if (isUserThere == false)
             {
                 forCheckMessage = $"Привет! Пожалуйста, введите '/yes' для подтверждения регистрации на нашем чудесном мероприятии и введите своё имя, с вами свяжутся";
             }
         }
+
 
 
 
