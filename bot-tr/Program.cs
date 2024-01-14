@@ -22,7 +22,6 @@ class Program
         var botToken = "6872155143:AAEVSYg6avTl15uqB650WKM6-u30XqOuR5s";
         var botHandler = new BotHandler(botToken);
 
-
         Console.WriteLine("Бот запущен. Нажмите Enter для выхода.");
         Console.ReadLine();
 
