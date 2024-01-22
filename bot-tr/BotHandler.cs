@@ -51,9 +51,17 @@ namespace bot_tr
                 switch (update.Message?.Text)
                 {
                     case string currentMessage when currentMessage == "/start":
+                        await logicUpdate.CheckUser(botClient, update, token);
+                        if (userName == null)
+                        {
                             await logicUpdate.SentMessege(botClient, update, token, "Привет! Пожалуйста, введите '/yes' для подтверждения регистрации на нашем чудесном мероприятии и введите своё имя, с вами свяжутся" +
-                                "если хочешь удалить упоминание о себе нажми /no");
-                        break;
+                                    "если хочешь удалить упоминание о себе нажми /no");
+                        }
+                        else
+                        {
+                            await logicUpdate.SentMessege(botClient, update, token, $"Привет {userName} если хочешь удалить упоминание о себе нажми /no");
+                        }
+                            break;
                        
                     case string currentMessage when currentMessage == "/yes" :
                         await logicUpdate.SentMessege(botClient, update,token, "Отлично! Теперь введите свое имя:");
@@ -68,8 +76,15 @@ namespace bot_tr
                         break;
                     
                     case string currentMessage when (currentMessage != "/no") || (currentMessage != "/yes") || (currentMessage != "/start"):
-                        await logicUpdate.SentMessege(botClient, update,token , $" тебя {logicUpdate.userName}, мы знаем , вы записаны, за вами выехали..");
                         await logicUpdate.CheckUser(botClient, update, token);
+                        if (logicUpdate.userName == null)
+                        {
+                            await logicUpdate.SentMessege(botClient, update, token, $" тебя мы не знаем , можешь записаться на наше чудесное мероприятие  нажав /yes");
+                        }
+                        else
+                        {
+                            await logicUpdate.SentMessege(botClient, update, token, $"Привет {logicUpdate.userName} если хочешь удалить упоминание о себе нажми /no");
+                        }
                         break;
 
                 }

@@ -14,7 +14,7 @@ namespace bot_tr
 
     {
 
-        public  string userName { get; set; }
+        public  string? userName { get; set; }
         public  long userId { get; set; }
         public  string? accountName { get; set; }
         
@@ -28,11 +28,11 @@ namespace bot_tr
         {
             get; set;
         }
+        DbHendler dbo = new DbHendler();
         public async Task SentMessege(ITelegramBotClient botClient, Update update, CancellationToken token, string message)
         {
             var chatId = update.Message.Chat.Id;
             await botClient.SendTextMessageAsync(chatId, message);
-           // BotHandler.
         }
 
         public  async Task RememberName(ITelegramBotClient botClient, Update update, CancellationToken token)
@@ -43,7 +43,9 @@ namespace bot_tr
    
                 userId = update.Message.From.Id;
                 accountName = update.Message.From.Username;
+                
                 Console.WriteLine($"Имя пользователя установлено: {userName}, ID: {userId}, {accountName}");
+                dbo.AddToDB(userName,userId,accountName);
                 FileHandler.SaveUserData(userName, userId, accountName);
             }
         }
@@ -51,14 +53,10 @@ namespace bot_tr
         {
 
             userId = update.Message.From.Id;
-            //FileHandler.CheckInJson(userId, isUserThere);
-            if (isUserThere == true)
+            string fromBd = await dbo.CheckWithDB(userId);
+            if (fromBd!= string.Empty)
             {
-                forCheckMessage = $"мы тебя знаем {userId} за тобой уже выехали, но если ссышь жмакай /no ";
-            }
-            if (isUserThere == false)
-            {
-                forCheckMessage = $"Привет! Пожалуйста, введите '/yes' для подтверждения регистрации на нашем чудесном мероприятии и введите своё имя, с вами свяжутся";
+                  userName = fromBd;
             }
         }
 
