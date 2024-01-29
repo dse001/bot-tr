@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 using Telegram.Bot.Types;
 using Telegram.Bot;
 
-namespace bot_tr
+namespace bot_tr.interfaces
 {
-    internal interface ILogic
-    {
+    public interface ILogicHandling
+    { 
         Task SentMessege(ITelegramBotClient botClient, Update update, CancellationToken token, string message);
         Task RememberName(ITelegramBotClient botClient, Update update, CancellationToken token);
         Task CheckUser(ITelegramBotClient botClient, Update update, CancellationToken token);

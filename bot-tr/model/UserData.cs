@@ -9,12 +9,12 @@ using SQLitePCL;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 
-namespace bot_tr
+namespace bot_tr.model
 {
-  
+
 
     class UserData
-    {        
+    {
         public string? UserName { get; set; }
         [Key]
         public long UserId { get; set; }

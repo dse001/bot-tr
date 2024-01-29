@@ -1,13 +1,8 @@
 ﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Telegram.Bot.Types;
 using File = System.IO.File;
 
-namespace bot_tr
+using bot_tr.model;
+namespace bot_tr.hendlers
 {
     internal class FileHandler
     {
@@ -79,26 +74,26 @@ namespace bot_tr
             {
 
 
-                    var jsonData = File.ReadAllText("userdata.json");
-                    var userData = JsonConvert.DeserializeObject<UserData>(jsonData);
+                var jsonData = File.ReadAllText("userdata.json");
+                var userData = JsonConvert.DeserializeObject<UserData>(jsonData);
 
-                    if (userData != null)
-                        if (!string.IsNullOrEmpty(jsonData))
-                {
-                    var userDataList = JsonConvert.DeserializeObject<List<UserData>>(jsonData);
-
-                    if (userDataList != null)
+                if (userData != null)
+                    if (!string.IsNullOrEmpty(jsonData))
                     {
-                        var userToRemove = userDataList.FirstOrDefault(u => u.UserId == userIDforCheck);
+                        var userDataList = JsonConvert.DeserializeObject<List<UserData>>(jsonData);
 
-                        if (userToRemove != null)
+                        if (userDataList != null)
                         {
-                            ;
-                            isUserThere = true;
-                        }
-                    }
+                            var userToRemove = userDataList.FirstOrDefault(u => u.UserId == userIDforCheck);
 
-                }
+                            if (userToRemove != null)
+                            {
+                                ;
+                                isUserThere = true;
+                            }
+                        }
+
+                    }
             }
         }
 

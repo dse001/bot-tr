@@ -9,7 +9,9 @@ using File = System.IO.File;
 using Telegram.Bot.Polling;
 using System.Runtime.CompilerServices;
 //using  bot_tr;
-
+using bot_tr.interfaces;
+using bot_tr.model;
+using bot_tr.hendlers;
 
 namespace bot_tr;
 class Program
@@ -24,9 +26,6 @@ class Program
 
         Console.WriteLine("Бот запущен. Нажмите Enter для выхода.");
         Console.ReadLine();
-
-  
-        
         cts.Cancel();
     }
 }

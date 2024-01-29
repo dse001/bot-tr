@@ -10,21 +10,19 @@ using File = System.IO.File;
 using Telegram.Bot.Exceptions;
 using System.Text.RegularExpressions;
 using System.Threading;
+using bot_tr.interfaces;
+using bot_tr.model;
 
-
-namespace bot_tr
+namespace bot_tr.hendlers
 {
-    public class BotHandler 
+    public class BotHandler
     {
-        public static string userName;
-        public static long userId;
-        public static string? accountName;
-        
-    public bool? isFlag
-    {
-        get;set;
-    }
-    
+
+        public bool? isFlag
+        {
+            get; set;
+        }
+
         public readonly ITelegramBotClient botClient;
 
         public BotHandler(string botToken)
@@ -38,44 +36,44 @@ namespace bot_tr
 
         public async Task HandleUpdate(ITelegramBotClient botClient, Update update, CancellationToken token)
         {
-            if (isFlag!=null)
+            if (isFlag != null)
             {
                 await logicUpdate.RememberName(botClient, update, token);
                 await logicUpdate.SentMessege(botClient, update, token, $"Приятно познакомиться, {logicUpdate.userName}! Твой ID: {logicUpdate.userId} {logicUpdate.accountName} мы вас найдем, вы записаны, за вами выехали..");
                 isFlag = null;
                 return;
             }
-            if (update.Message?.Text != null )
+            if (update.Message?.Text != null)
             {
 
                 switch (update.Message?.Text)
                 {
                     case string currentMessage when currentMessage == "/start":
                         await logicUpdate.CheckUser(botClient, update, token);
-                        if (userName == null)
+                        if (logicUpdate.userName == null)
                         {
                             await logicUpdate.SentMessege(botClient, update, token, "Привет! Пожалуйста, введите '/yes' для подтверждения регистрации на нашем чудесном мероприятии и введите своё имя, с вами свяжутся" +
                                     "если хочешь удалить упоминание о себе нажми /no");
                         }
                         else
                         {
-                            await logicUpdate.SentMessege(botClient, update, token, $"Привет {userName} если хочешь удалить упоминание о себе нажми /no");
+                            await logicUpdate.SentMessege(botClient, update, token, $"Привет {logicUpdate.userName} если хочешь удалить упоминание о себе нажми /no");
                         }
-                            break;
-                       
-                    case string currentMessage when currentMessage == "/yes" :
-                        await logicUpdate.SentMessege(botClient, update,token, "Отлично! Теперь введите свое имя:");
+                        break;
+
+                    case string currentMessage when currentMessage == "/yes":
+                        await logicUpdate.SentMessege(botClient, update, token, "Отлично! Теперь введите свое имя:");
                         isFlag = true;
                         return;
-                        
+
 
 
                     case string currentMessage when currentMessage == "/no":
-                        //FileHandler.RemoveUserData(userId);
-                        await logicUpdate.SentMessege(botClient, update,token, $"ну как хочешь, но мы тебя запомним");
+                        await logicUpdate.RemoveByID(botClient, update, token);
+                        await logicUpdate.SentMessege(botClient, update, token, $"{logicUpdate.userName} ну как хочешь, но мы тебя запомним");
                         break;
-                    
-                    case string currentMessage when (currentMessage != "/no") || (currentMessage != "/yes") || (currentMessage != "/start"):
+
+                    case string currentMessage when currentMessage != "/no" || currentMessage != "/yes" || currentMessage != "/start":
                         await logicUpdate.CheckUser(botClient, update, token);
                         if (logicUpdate.userName == null)
                         {
@@ -102,6 +100,6 @@ namespace bot_tr
             Console.WriteLine(ErrorMessage);
             return Task.CompletedTask;
         }
-        
+
     }
 }
