@@ -1,6 +1,8 @@
 ﻿using Telegram.Bot;
 using Telegram.Bot.Types;
 using bot_tr.interfaces;
+using bot_tr.model;
+
 namespace bot_tr.hendlers
 {
     public class LogicUpdate : ILogicHandling
@@ -8,54 +10,45 @@ namespace bot_tr.hendlers
     {
         internal string? userName;
         internal long userId;
-        internal string? accountName;
 
-        private static bool waitingForConfirmation = false;
-
-        public bool isUserThere
+       DbHendler dbo = new DbHendler();
+        public async Task<Message> SentMessege(ITelegramBotClient botClient, Update update, CancellationToken token, string message)
         {
-            get; set;
-        }
-        public string forCheckMessage
-        {
-            get; set;
-        }
-        DbHendler dbo = new DbHendler();
-        public async Task SentMessege(ITelegramBotClient botClient, Update update, CancellationToken token, string message)
-        {
-            var chatId = update!.Message!.Chat.Id;
-            await botClient.SendTextMessageAsync(chatId, message);
+            return _ = await botClient.SendTextMessageAsync(update!.Message!.Chat.Id, message);        
         }
 
         public async Task RememberName(ITelegramBotClient botClient, Update update, CancellationToken token)
         {
             if (string.IsNullOrEmpty(userName))
             {
-                userName = update!.Message!.Text;
-                userId = update!.Message!.From!.Id;
-                accountName = update.Message.From.Username;
-
-                Console.WriteLine($"Имя пользователя установлено: {userName}, ID: {userId}, {accountName}");
-                await dbo.AddToDB(userName!, userId, accountName!);
-                FileHandler.SaveUserData(userName!, userId, accountName!);
+                UserData userData = new UserData()
+                {
+                    UserName = update!.Message!.Text,
+                    UserId = update!.Message!.From!.Id,
+                    AccountName = update.Message.From.Username
+                };
+                await dbo.AddToDB(userData);
             }
         }
 
-        public async Task CheckUser(ITelegramBotClient botClient, Update update, CancellationToken token)
+        public async Task<string?> GetUserFromDB(ITelegramBotClient botClient, Update update, CancellationToken token)
         {
 
             userId = update!.Message!.From!.Id;
-            string fromBd = await dbo.CheckWithDB(userId);
-            _ = fromBd != string.Empty ? (userName = fromBd) : (userName = null);
+            
+           return await dbo.CheckWithDB(userId);
+  
         }
-        public async Task RemoveByID(ITelegramBotClient botClient, Update update, CancellationToken token)
+
+        public async Task<string?> TryToCheckUserFromDB(ITelegramBotClient botClient, Update update, CancellationToken token, string fromBd)
         {
-            userId = update!.Message!.From!.Id;
-            string fromBd = await dbo.RemoveFromDBbyID(userId!);
-            if (fromBd != string.Empty)
-            {
-                userName = fromBd;
-            }
+
+            return fromBd != string.Empty ? (userName = fromBd) : (userName = null);
+        }
+
+        public async Task<string?> RemoveUser(long id)
+        {
+            return userName = await dbo.RemoveFromDBbyID(id!);
         }
     }
 }

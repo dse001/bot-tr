@@ -1,4 +1,5 @@
-﻿using System;
+﻿using bot_tr.model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,9 +7,10 @@ using System.Threading.Tasks;
 
 namespace bot_tr.interfaces
 {
-    internal interface IDataBase
+    public interface IDataBase
     {
-        Task AddToDB(string username, long id, string acountName);
+        Task AddToDB(UserData userData);
         Task<string?> CheckWithDB(long id);
+        Task<string?> RemoveFromDBbyID(long id);
     }
 }

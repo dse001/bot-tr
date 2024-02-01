@@ -5,21 +5,22 @@ using bot_tr.model;
 namespace bot_tr.hendlers
 {
 
-    internal class DbHendler : IDataBase
+    public class DbHendler : IDataBase
 
     {
-        public async Task AddToDB(string username, long id, string acountName)
+        public async Task AddToDB(UserData userData)//        public async Task AddToDB(string username, long id, string acountName)
+
         {
             DbUserContext db = new DbUserContext();
-            {
+            //{
 
-                UserData userData = new UserData()
-                {
-                    UserName = username,
-                    UserId = id,
-                    AccountName = acountName
-                };
-
+            //    UserData userData = new UserData()
+            //    {
+            //        UserName = username,
+            //        UserId = id,
+            //        AccountName = acountName
+            //    };
+            { 
                 db.UserDatas.Add(userData);
                 db.SaveChanges();
             }

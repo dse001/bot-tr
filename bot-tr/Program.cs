@@ -12,6 +12,8 @@ using System.Runtime.CompilerServices;
 using bot_tr.interfaces;
 using bot_tr.model;
 using bot_tr.hendlers;
+using Moq;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace bot_tr;
 class Program

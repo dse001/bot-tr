@@ -24,22 +24,18 @@ namespace bot_tr.hendlers
         }
 
         public readonly ITelegramBotClient botClient;
-
         public BotHandler(string botToken)
         {
             botClient = new TelegramBotClient(botToken);
             botClient.StartReceiving(HandleUpdate, HandlePollingErrorAsync);
         }
-
         LogicUpdate logicUpdate = new LogicUpdate();
-
-
         public async Task HandleUpdate(ITelegramBotClient botClient, Update update, CancellationToken token)
         {
             if (isFlag != null)
             {
                 await logicUpdate.RememberName(botClient, update, token);
-                await logicUpdate.SentMessege(botClient, update, token, $"Приятно познакомиться, {logicUpdate.userName}! Твой ID: {logicUpdate.userId} {logicUpdate.accountName} мы вас найдем, вы записаны, за вами выехали..");
+                await logicUpdate.SentMessege(botClient, update, token, $"Приятно познакомиться, {update!.Message!.Text}! Твой ID: {update!.Message!.From!.Id} {update.Message.From.Username} мы вас найдем, вы записаны, за вами выехали..");
                 isFlag = null;
                 return;
             }
@@ -49,7 +45,7 @@ namespace bot_tr.hendlers
                 switch (update.Message?.Text)
                 {
                     case string currentMessage when currentMessage == "/start":
-                        await logicUpdate.CheckUser(botClient, update, token);
+                        await logicUpdate.TryToCheckUserFromDB(botClient, update, token, await logicUpdate.GetUserFromDB(botClient, update, token));
                         if (logicUpdate.userName == null)
                         {
                             await logicUpdate.SentMessege(botClient, update, token, "Привет! Пожалуйста, введите '/yes' для подтверждения регистрации на нашем чудесном мероприятии и введите своё имя, с вами свяжутся" +
@@ -66,15 +62,14 @@ namespace bot_tr.hendlers
                         isFlag = true;
                         return;
 
-
-
                     case string currentMessage when currentMessage == "/no":
-                        await logicUpdate.RemoveByID(botClient, update, token);
-                        await logicUpdate.SentMessege(botClient, update, token, $"{logicUpdate.userName} ну как хочешь, но мы тебя запомним");
+                        await logicUpdate.TryToCheckUserFromDB(botClient, update, token, await logicUpdate.GetUserFromDB(botClient, update, token));
+                        string delededUserName = await logicUpdate.RemoveUser(update!.Message!.From!.Id);
+                        await logicUpdate.SentMessege(botClient, update, token, $"{delededUserName} ну как хочешь, но мы тебя запомним");
                         break;
 
                     case string currentMessage when currentMessage != "/no" || currentMessage != "/yes" || currentMessage != "/start":
-                        await logicUpdate.CheckUser(botClient, update, token);
+                        await logicUpdate.TryToCheckUserFromDB(botClient, update, token, await logicUpdate.GetUserFromDB(botClient, update, token));
                         if (logicUpdate.userName == null)
                         {
                             await logicUpdate.SentMessege(botClient, update, token, $" тебя мы не знаем , можешь записаться на наше чудесное мероприятие  нажав /yes");
