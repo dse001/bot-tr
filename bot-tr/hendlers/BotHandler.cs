@@ -22,14 +22,16 @@ namespace bot_tr.hendlers
         {
             get; set;
         }
-
+        private readonly ILogicHandling logicUpdate;
         public readonly ITelegramBotClient botClient;
-        public BotHandler(string botToken)
+        public BotHandler(string botToken, ILogicHandling logicUpdate)
+
         {
+            this.logicUpdate = logicUpdate;
             botClient = new TelegramBotClient(botToken);
-            botClient.StartReceiving(HandleUpdate, HandlePollingErrorAsync);
+            botClient.StartReceiving(HandleUpdate, ErrorHandler.HandlePollingErrorAsync);
         }
-        LogicUpdate logicUpdate = new LogicUpdate();
+       // LogicUpdate logicUpdate = new LogicUpdate();
         public async Task HandleUpdate(ITelegramBotClient botClient, Update update, CancellationToken token)
         {
             if (isFlag != null)
@@ -45,15 +47,16 @@ namespace bot_tr.hendlers
                 switch (update.Message?.Text)
                 {
                     case string currentMessage when currentMessage == "/start":
-                        await logicUpdate.TryToCheckUserFromDB(botClient, update, token, await logicUpdate.GetUserFromDB(botClient, update, token));
-                        if (logicUpdate.userName == null)
+                        string _ = await logicUpdate.TryToCheckUserFromDB(botClient, update, token, await logicUpdate.GetUserFromDB(botClient, update, token));
+
+                        if (_ == null)
                         {
                             await logicUpdate.SentMessege(botClient, update, token, "Привет! Пожалуйста, введите '/yes' для подтверждения регистрации на нашем чудесном мероприятии и введите своё имя, с вами свяжутся" +
                                     "если хочешь удалить упоминание о себе нажми /no");
                         }
                         else
                         {
-                            await logicUpdate.SentMessege(botClient, update, token, $"Привет {logicUpdate.userName} если хочешь удалить упоминание о себе нажми /no");
+                            await logicUpdate.SentMessege(botClient, update, token, $"Привет {_} если хочешь удалить упоминание о себе нажми /no");
                         }
                         break;
 
@@ -69,31 +72,19 @@ namespace bot_tr.hendlers
                         break;
 
                     case string currentMessage when currentMessage != "/no" || currentMessage != "/yes" || currentMessage != "/start":
-                        await logicUpdate.TryToCheckUserFromDB(botClient, update, token, await logicUpdate.GetUserFromDB(botClient, update, token));
-                        if (logicUpdate.userName == null)
+                        string userName = await logicUpdate.TryToCheckUserFromDB(botClient, update, token, await logicUpdate.GetUserFromDB(botClient, update, token));
+                        if (userName == null)
                         {
                             await logicUpdate.SentMessege(botClient, update, token, $" тебя мы не знаем , можешь записаться на наше чудесное мероприятие  нажав /yes");
                         }
                         else
                         {
-                            await logicUpdate.SentMessege(botClient, update, token, $"Привет {logicUpdate.userName} если хочешь удалить упоминание о себе нажми /no");
+                            await logicUpdate.SentMessege(botClient, update, token, $"Привет {userName} если хочешь удалить упоминание о себе нажми /no");
                         }
                         break;
 
                 }
             }
-        }
-        public static Task HandlePollingErrorAsync(ITelegramBotClient botClient, Exception exception, CancellationToken cancellationToken)
-        {
-            var ErrorMessage = exception switch
-            {
-                ApiRequestException apiRequestException
-                    => $"Telegram API Error:\n[{apiRequestException.ErrorCode}]\n{apiRequestException.Message}",
-                _ => exception.ToString()
-            };
-
-            Console.WriteLine(ErrorMessage);
-            return Task.CompletedTask;
         }
 
     }

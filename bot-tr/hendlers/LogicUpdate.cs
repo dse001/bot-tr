@@ -10,8 +10,12 @@ namespace bot_tr.hendlers
     {
         internal string? userName;
         internal long userId;
+        private readonly IDataBase dbo;
+        public LogicUpdate(IDataBase dbHendler)
+        {
+            dbo = dbHendler;
+        }
 
-       DbHendler dbo = new DbHendler();
         public async Task<Message> SentMessege(ITelegramBotClient botClient, Update update, CancellationToken token, string message)
         {
             return _ = await botClient.SendTextMessageAsync(update!.Message!.Chat.Id, message);        

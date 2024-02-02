@@ -12,14 +12,7 @@ namespace bot_tr.hendlers
 
         {
             DbUserContext db = new DbUserContext();
-            //{
 
-            //    UserData userData = new UserData()
-            //    {
-            //        UserName = username,
-            //        UserId = id,
-            //        AccountName = acountName
-            //    };
             { 
                 db.UserDatas.Add(userData);
                 db.SaveChanges();
