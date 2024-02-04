@@ -8,7 +8,7 @@ namespace bot_tr.hendlers
     public class DbHendler : IDataBase
 
     {
-        public async Task AddToDB(UserData userData)//        public async Task AddToDB(string username, long id, string acountName)
+        public async Task AddToDB(UserData userData)        
 
         {
             DbUserContext db = new DbUserContext();

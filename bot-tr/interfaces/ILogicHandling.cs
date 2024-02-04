@@ -10,10 +10,10 @@ namespace bot_tr.interfaces
 {
     public interface ILogicHandling
     { 
-        Task<Message> SentMessege(ITelegramBotClient botClient, Update update, CancellationToken token, string message);
-        Task RememberName(ITelegramBotClient botClient, Update update, CancellationToken token);
-        Task<string> GetUserFromDB(ITelegramBotClient botClient, Update update, CancellationToken token);
-        Task<string> TryToCheckUserFromDB(ITelegramBotClient botClient, Update update, CancellationToken token, string fromBd);
+        Task<Message> SentMessege(ITelegramBotClient botClient, Update update,  string message);
+        Task RememberName(Update update);
+        Task<string> GetUserFromDB(Update update);
+        Task<string> TryToCheckUserFromDB(string fromBd);
         Task<string?> RemoveUser(long id);
 
     }

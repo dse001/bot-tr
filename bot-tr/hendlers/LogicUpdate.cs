@@ -17,12 +17,12 @@ namespace bot_tr.hendlers
             dbo = dbHendler;
         }
 
-        public async Task<Message> SentMessege(ITelegramBotClient botClient, Update update, CancellationToken token, string message)
+        public async Task<Message> SentMessege(ITelegramBotClient botClient, Update update, string message)
         {
             return _ = await botClient.SendTextMessageAsync(update!.Message!.Chat.Id, message);        
         }
 
-        public async Task RememberName(ITelegramBotClient botClient, Update update, CancellationToken token)
+        public async Task RememberName(Update update)
         {
             if (string.IsNullOrEmpty(userName))
             {
@@ -36,16 +36,15 @@ namespace bot_tr.hendlers
             }
         }
 
-        public async Task<string?> GetUserFromDB(ITelegramBotClient botClient, Update update, CancellationToken token)
+        public async Task<string?> GetUserFromDB(Update update)
         {
 
             userId = update!.Message!.From!.Id;
             
            return await dbo.CheckWithDB(userId);
-  
         }
 
-        public async Task<string?> TryToCheckUserFromDB(ITelegramBotClient botClient, Update update, CancellationToken token, string fromBd)
+        public async Task<string?> TryToCheckUserFromDB(string fromBd)
         {
 
             return fromBd != string.Empty ? (userName = fromBd) : (userName = null);
