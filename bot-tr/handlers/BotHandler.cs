@@ -13,11 +13,10 @@ using System.Threading;
 using bot_tr.interfaces;
 using bot_tr.model;
 
-namespace bot_tr.hendlers
+namespace bot_tr.handlers
 {
     public class BotHandler
     {
-
         public bool? isFlag
         {
             get; set;
@@ -31,7 +30,7 @@ namespace bot_tr.hendlers
             botClient = new TelegramBotClient(botToken);
             botClient.StartReceiving(HandleUpdate, ErrorHandler.HandlePollingErrorAsync);
         }
-       // LogicUpdate logicUpdate = new LogicUpdate();
+
         public async Task HandleUpdate(ITelegramBotClient botClient, Update update, CancellationToken token)
         {
             if (isFlag != null)
@@ -70,6 +69,11 @@ namespace bot_tr.hendlers
                         string delededUserName = await logicUpdate.RemoveUser(update!.Message!.From!.Id);
                         await logicUpdate.SentMessege(botClient, update, $"{delededUserName} ну как хочешь, но мы тебя запомним");
                         break;
+
+                    case string currentMessage when currentMessage == "/admin":
+                        string allDataForAdmin = await logicUpdate.AdminOperation(update,(int)GetSettings.adminId);
+                        await logicUpdate.SentMessege(botClient, update, $"{allDataForAdmin}");
+                        return;
 
                     case string currentMessage when currentMessage != "/no" || currentMessage != "/yes" || currentMessage != "/start":
                         string userName = await logicUpdate.TryToCheckUserFromDB(await logicUpdate.GetUserFromDB(update));

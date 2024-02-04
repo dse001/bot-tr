@@ -15,6 +15,6 @@ namespace bot_tr.interfaces
         Task<string> GetUserFromDB(Update update);
         Task<string> TryToCheckUserFromDB(string fromBd);
         Task<string?> RemoveUser(long id);
-
+        Task<string?> AdminOperation(Update update, int adminsId);
     }
 }

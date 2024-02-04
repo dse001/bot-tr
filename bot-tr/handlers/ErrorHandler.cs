@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Telegram.Bot.Exceptions;
 using Telegram.Bot;
 
-namespace bot_tr.hendlers
+namespace bot_tr.handlers
 {
     internal static class ErrorHandler
     {
@@ -22,6 +22,5 @@ namespace bot_tr.hendlers
             Console.WriteLine(ErrorMessage);
             return Task.CompletedTask;
         }
-
     }
 }

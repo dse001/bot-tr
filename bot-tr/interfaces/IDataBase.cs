@@ -12,5 +12,6 @@ namespace bot_tr.interfaces
         Task AddToDB(UserData userData);
         Task<string?> CheckWithDB(long id);
         Task<string?> RemoveFromDBbyID(long id);
+        Task<string?> GetAllData();
     }
 }

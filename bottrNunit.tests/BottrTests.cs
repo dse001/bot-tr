@@ -10,7 +10,6 @@ namespace bottrNunit.tests
 {
     public class Tests
     {
-
         private int dbID;
         
         [Test]
@@ -18,8 +17,8 @@ namespace bottrNunit.tests
         {
             RememberMessage_Integration_test();
             GetUserFromDB_integration_test();
+            AdminOperation_integration_Negative_Test();
             RemoveUser_Integration_test();
-
         }
 
         [Test]
@@ -101,6 +100,21 @@ namespace bottrNunit.tests
             var call = logicUpdate.RemoveUser(dbID);
             Assert.That(call.IsCompletedSuccessfully, Is.True);
             Assert.That(call.Result, Is.EqualTo("testText"));
+        }
+        
+        public async Task AdminOperation_integration_Negative_Test()
+        {
+            var logicUpdate = new LogicUpdate(new DbHendler());
+            var update = new Update
+            {
+                Message = new Message
+                {
+                    From = new User { Id = dbID, Username = "tester2" },
+                    Text = $"testText",
+                },
+            };
+            var call = logicUpdate.AdminOperation(update, 00);
+            Assert.That(call.Result, Is.EqualTo("нет доступа"));
         }
     } 
 }

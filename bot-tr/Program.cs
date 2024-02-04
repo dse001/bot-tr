@@ -11,7 +11,7 @@ using System.Runtime.CompilerServices;
 //using  bot_tr;
 using bot_tr.interfaces;
 using bot_tr.model;
-using bot_tr.hendlers;
+using bot_tr.handlers;
 using Moq;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
@@ -20,13 +20,11 @@ class Program
 {
     static void Main(string[] args)
     {
-
-
+        GetSettings.GetFromApsetting();
         using CancellationTokenSource cts = new();
-        var botToken = "6872155143:AAEVSYg6avTl15uqB650WKM6-u30XqOuR5s";
-        var botHandler = new BotHandler(botToken, new LogicUpdate(new DbHendler()));
-
-        Console.WriteLine("Бот запущен. Нажмите Enter для выхода.");
+        var botToken = GetSettings.botToken;
+        var botHandler = new BotHandler(botToken, new LogicUpdate(new DbHandler()));
+        Console.WriteLine("bottr is started, for exit program tap enter.");
         Console.ReadLine();
         cts.Cancel();
     }
