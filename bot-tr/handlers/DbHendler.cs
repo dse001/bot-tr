@@ -1,6 +1,5 @@
 ﻿using bot_tr.interfaces;
 using bot_tr.model;
-using System.Text.RegularExpressions;
 
 namespace bot_tr.handlers
 {
@@ -8,13 +7,13 @@ namespace bot_tr.handlers
 
     {
         private readonly IDataBase db;
-        public string outData; 
+        public string outData;
 
-        public async Task AddToDB(UserData userData)        
+        public async Task AddToDB(UserData userData)
 
         {
-        DbUserContext db = new DbUserContext();
-            { 
+            DbUserContext db = new DbUserContext();
+            {
                 db.UserDatas.Add(userData);
                 db.SaveChanges();
             }
@@ -70,11 +69,15 @@ namespace bot_tr.handlers
                 }
             }
         }
-        
+
         public void StringForOut(string UserName, long UserId, string AccountName)
         {
-            string line = $"{UserName} ,{UserId}, {AccountName}"+ "\n";
+            string line = $"{UserName} ,{UserId}, {AccountName}" + "\n";
             outData = outData + line;
+        }
+        public async Task DelloutDataForReuse()
+        {
+            outData = string.Empty;
         }
     }
 }

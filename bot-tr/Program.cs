@@ -1,19 +1,5 @@
-﻿using System;
-using Telegram.Bot;
-using Telegram.Bot.Args;
-using Newtonsoft.Json;
-using Telegram.Bot.Types;
-using Telegram.Bot.Exceptions;
-using Telegram.Bot.Types;
-using File = System.IO.File;
-using Telegram.Bot.Polling;
-using System.Runtime.CompilerServices;
-//using  bot_tr;
-using bot_tr.interfaces;
-using bot_tr.model;
+﻿
 using bot_tr.handlers;
-using Moq;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace bot_tr;
 class Program

@@ -13,5 +13,6 @@ namespace bot_tr.interfaces
         Task<string?> CheckWithDB(long id);
         Task<string?> RemoveFromDBbyID(long id);
         Task<string?> GetAllData();
+        Task DelloutDataForReuse();
     }
 }

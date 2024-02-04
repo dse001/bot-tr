@@ -1,17 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Telegram.Bot.Types;
+﻿using Telegram.Bot.Types;
 using Telegram.Bot;
-using Newtonsoft.Json;
-using File = System.IO.File;
-using Telegram.Bot.Exceptions;
-using System.Text.RegularExpressions;
-using System.Threading;
 using bot_tr.interfaces;
-using bot_tr.model;
 
 namespace bot_tr.handlers
 {

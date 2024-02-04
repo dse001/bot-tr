@@ -59,7 +59,9 @@ namespace bot_tr.handlers
         {
             if (update!.Message!.From!.Id == adminsId)
             {
-                return dbo.GetAllData().Result;
+                var list =  dbo.GetAllData().Result;
+                dbo.DelloutDataForReuse();
+                return list;
             }
             else
             {

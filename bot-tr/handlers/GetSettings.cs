@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using bot_tr.model;
 using File = System.IO.File;
-using System.Net.Security;
 
 namespace bot_tr.handlers
 {

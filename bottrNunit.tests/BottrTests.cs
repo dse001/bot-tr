@@ -1,11 +1,9 @@
-using bot_tr.hendlers;
+using bot_tr.handlers;
 using Telegram.Bot.Types;
 using Telegram.Bot;
 using bot_tr.model;
 
-
 namespace bottrNunit.tests
-
 
 {
     public class Tests
@@ -24,7 +22,7 @@ namespace bottrNunit.tests
         [Test]
         public async Task TryToCheckUserFromDB_Unit_Negative_test()
         {
-            var logicUpdate = new LogicUpdate(new DbHendler());
+            var logicUpdate = new LogicUpdate(new DbHandler());
             var call = logicUpdate.TryToCheckUserFromDB(String.Empty);
             Assert.That(call.Result, Is.Null);
         }
@@ -32,7 +30,7 @@ namespace bottrNunit.tests
         [Test]
         public async Task TryToCheckUserFromDB_Unit_Positive_test()
         {
-            var logicUpdate = new LogicUpdate(new DbHendler());
+            var logicUpdate = new LogicUpdate(new DbHandler());
             var call = logicUpdate.TryToCheckUserFromDB("Test");
             Assert.That(call.Result.ToString(), Is.EqualTo("Test"));
         }
@@ -41,7 +39,7 @@ namespace bottrNunit.tests
         public async Task Checking_Then_SendTextMessageAsync_is_Called_in_test_SentMessege()
         {
             var botClient = new TelegramBotClient("MyTestBot - API - TOKEN");
-            var logicUpdate = new LogicUpdate(new DbHendler());
+            var logicUpdate = new LogicUpdate(new DbHandler());
             var update = new Update
             {
                 Message = new Message
@@ -57,7 +55,7 @@ namespace bottrNunit.tests
        
         public async Task RememberMessage_Integration_test()
         {
-            var logicUpdate = new LogicUpdate(new DbHendler());
+            var logicUpdate = new LogicUpdate(new DbHandler());
             UserData userdata = new UserData();
             Random random = new Random();
             dbID = random.Next(100, 999999999);
@@ -78,7 +76,7 @@ namespace bottrNunit.tests
         
         public async Task GetUserFromDB_integration_test()
         {
-            var logicUpdate = new LogicUpdate(new DbHendler());
+            var logicUpdate = new LogicUpdate(new DbHandler());
             UserData userdata = new UserData();
             var update = new Update
             {
@@ -96,7 +94,7 @@ namespace bottrNunit.tests
         
         public async Task RemoveUser_Integration_test()
         {
-            var logicUpdate = new LogicUpdate(new DbHendler());
+            var logicUpdate = new LogicUpdate(new DbHandler());
             var call = logicUpdate.RemoveUser(dbID);
             Assert.That(call.IsCompletedSuccessfully, Is.True);
             Assert.That(call.Result, Is.EqualTo("testText"));
@@ -104,7 +102,7 @@ namespace bottrNunit.tests
         
         public async Task AdminOperation_integration_Negative_Test()
         {
-            var logicUpdate = new LogicUpdate(new DbHendler());
+            var logicUpdate = new LogicUpdate(new DbHandler());
             var update = new Update
             {
                 Message = new Message
